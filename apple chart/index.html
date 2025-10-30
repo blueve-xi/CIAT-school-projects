@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Stock Price Chart</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; }
+        .chart-container { width: 80%; max-width: 800px; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <h1>AAPL Stock Price (Simulated)</h1>
+    <div class="chart-container">
+        <canvas id="aaplChart"></canvas>
+    </div>
+
+    <script>
+        // Initial chart setup
+        const ctx = document.getElementById('aaplChart').getContext('2d');
+        let aaplChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'AAPL Price ($)',
+                    data: [],
+                    borderColor: 'rgb(0, 122, 255)',
+                    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Time' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Price ($)' },
+                        beginAtZero: false
+                    }
+                },
+                responsive: true
+            }
+        });
+
+        // Function to fetch data from the PHP backend
+        async function fetchPrice() {
+            try {
+                const response = await fetch('get_price.php');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Add the new data to the chart
+                addData(aaplChart, data.timestamp, data.price);
+            } catch (error) {
+                console.error("Could not fetch stock price:", error);
+            }
+        }
+
+        // Function to add new data to the chart and remove old data
+        function addData(chart, label, newData) {
+            // Add new data point
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(newData);
+            });
+
+            // Remove the oldest data point to keep the chart from getting too crowded
+            const maxDataPoints = 30;
+            if (chart.data.labels.length > maxDataPoints) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach((dataset) => {
+                    dataset.data.shift();
+                });
+            }
+
+            chart.update(); // Update the chart with the new data
+        }
+        
+        // Fetch initial data immediately
+        fetchPrice();
+
+        // Fetch data every 2 seconds
+        setInterval(fetchPrice, 2000);
+
+    </script>
+</body>
+</html>
