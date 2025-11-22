@@ -1,11 +1,8 @@
-# PowerShell Script: System Information Backup
-
-# a. Display the current date and time
+# a. Display date and time
 Write-Host "Script started at: " -ForegroundColor Green
 Get-Date
-Write-Host ""  # Empty line for better readability
+Write-Host ""
 
-# b. Retrieve a list of running processes and save it to a file
 $ProcessFile = "RunningProcesses_$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').txt"
 Write-Host "Retrieving list of running processes..." -ForegroundColor Yellow
 Get-Process | Select-Object Id, Name, CPU, WorkingSet, StartTime, Path | 
@@ -16,7 +13,7 @@ Get-Process | Select-Object Id, Name, CPU, WorkingSet, StartTime, Path |
 Write-Host "Process list saved to: $ProcessFile" -ForegroundColor Cyan
 Write-Host ""
 
-# c. Create a new directory named "Backup" in the current location
+# c. Create a dir name backup
 $BackupPath = ".\Backup"
 if (-not (Test-Path -Path $BackupPath)) {
     New-Item -ItemType Directory -Path $BackupPath -Force | Out-Null
@@ -25,12 +22,11 @@ if (-not (Test-Path -Path $BackupPath)) {
     Write-Host "Directory 'Backup' already exists." -ForegroundColor Gray
 }
 
-# d. Move the file created in step b to the "Backup" directory
-$Destination = "$BackupPath\$ProcessFile"
-Move-Item -Path $ProcessFile -Destination $Destination -Force
+# d. Move the file to Backup folder
+$Destination = "$BackupPath\$Notepadtest"
+Move-Item -Path "$env:USERPROFILE\Desktop\*" -Destination $Destination -Force
 Write-Host "File moved to: $Destination" -ForegroundColor Cyan
 
-# e. Display completion message
 Write-Host ""
 Write-Host "===========================================" -ForegroundColor Magenta
 Write-Host "     Script completed successfully!     " -ForegroundColor Magenta
