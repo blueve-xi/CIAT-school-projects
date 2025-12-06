@@ -4,13 +4,12 @@ Write-Host "Opening Notepad..." -ForegroundColor Green
 # Start Notepad and capture the process object so we can wait for it
 $notepad = Start-Process notepad.exe -PassThru
 
-Write-Host "Notepad is now open. Please leave it open for now." -ForegroundColor Yellow
+Write-Host "Notepad is now open. Please leave it open." -ForegroundColor Yellow
 
 # 2. Wait for Notepad to close
 Write-Host "Waiting for you to close Notepad..." -ForegroundColor Cyan
-Write-Host ">>> When you're ready, close the Notepad window to continue the script." -ForegroundColor White
+Write-Host "please close the Notepad window to continue the script." -ForegroundColor White
 
-# This blocks the script until the Notepad process ends
 $notepad.WaitForExit()
 
 Write-Host "Notepad has been closed. Continuing..." -ForegroundColor Green
@@ -28,7 +27,7 @@ Write-Host "Created file: $sampleFile" -ForegroundColor Green
 
 # 4. Open SampleFile.txt in Notepad for editing
 Write-Host "Opening SampleFile.txt in Notepad for editing..." -ForegroundColor Green
-Write-Host ">>> Please type a short message (e.g., 'Hello from PowerShell!') and then SAVE and close Notepad." -ForegroundColor Yellow
+Write-Host ">>> Please type a short message then SAVE and close Notepad." -ForegroundColor Yellow
 
 Start-Process notepad.exe -ArgumentList $sampleFile -PassThru | Wait-Process
 
@@ -50,9 +49,9 @@ Write-Host "Copied SampleFile.txt to Backup folder." -ForegroundColor Green
 
 # Permanently delete the original file
 Remove-Item -Path $sampleFile -Force
-Write-Host "Original SampleFile.txt has been permanently deleted from 'Lab Files' folder." -ForegroundColor Red
+Write-Host "Original SampleFile.txt has been permanently deleted from the folder." -ForegroundColor Red
 
 # 7. Final confirmation
-Write-Host "`nLab completed successfully!" -ForegroundColor Cyan
+Write-Host "Lab completed successfully!" -ForegroundColor Cyan
 Write-Host "You can find your saved text in:" -ForegroundColor White
 Write-Host "   $backupFile" -ForegroundColor Yellow
