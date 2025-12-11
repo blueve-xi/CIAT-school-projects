@@ -4,7 +4,7 @@ $ConsoleColors = @(
     "DarkGray", "Blue", "Green", "Cyan", "Red", "Magenta", "Yellow", "White"
 )
 
-# Prompt the user for their name and store the input in a variable
+# Prompt the user for their name
 $Name = Read-Host -Prompt "What is your name?"
 
 # Select a random color from the array
