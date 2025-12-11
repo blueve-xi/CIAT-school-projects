@@ -1,20 +1,18 @@
-# Wallpaper Cycler - Changes wallpaper every minute from "My Photos" folder
-# Save as: WallpaperCycler.ps1  (Run in PowerShell as Administrator recommended for first run)
+# Wallpaper changer - Changes wallpaper every minute from My Photos folder
 
 try {
-    # Define the folder path
+    # The folder path
     $FolderPath = "$env:USERPROFILE\Pictures\My Photos"
 
     # Create the folder if it doesn't exist
     if (-not (Test-Path -Path $FolderPath)) {
         New-Item -ItemType Directory -Path $FolderPath -Force | Out-Null
         Write-Host "Created folder: $FolderPath" -ForegroundColor Green
-        Write-Host "Please add some photos (JPG/PNG/BMP) to the folder and run the script again." -ForegroundColor Yellow
+        Write-Host "Please add some photos to the folder and run the script again." -ForegroundColor Yellow
         Read-Host "Press Enter to exit"
         exit
     }
 
-    # Get all image files
     $Images = Get-ChildItem -Path $FolderPath -Include *.jpg, *.jpeg, *.png, *.bmp -File -Recurse -ErrorAction Stop
 
     if ($Images.Count -eq 0) {
@@ -41,13 +39,12 @@ try {
         foreach ($Image in $Images) {
             $FullPath = $Image.FullName
 
-            # Set wallpaper (SPI_SETDESKWALLPAPER = 20, SPIF_UPDATEINIFILE = 0x01, SPIF_SENDWININICHANGE = 0x02)
             [Wallpaper]::SystemParametersInfo(20, 0, $FullPath, 0x01 -bor 0x02) | Out-Null
 
             # Show current wallpaper name
             Write-Host "$(Get-Date -Format 'HH:mm:ss') - Wallpaper set to: $($Image.Name)" -ForegroundColor Green
 
-            # Wait 60 seconds
+            # Time duration before wallpaper changes
             Start-Sleep -Seconds 60
         }
     }
