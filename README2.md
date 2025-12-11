@@ -1,4 +1,4 @@
-##wallpaper changer ##
+## wallpaper changer ##
 * ## file can be run anywhere in the system ##
 * run file as admin if needed
 * double check if photos are in the my photos folder on your system
